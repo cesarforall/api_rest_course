@@ -9,6 +9,8 @@ const API_URL =
 // 	});
 
 const cats = document.querySelector('#cats');
+let randomCats = [];
+let articlesNodes = [];
 
 async function getCat() {
 	const res = await fetch(API_URL);
@@ -20,11 +22,37 @@ async function getCat() {
 		img.width = '200';
 		img.id = 'cat' + cat.id;
 		img.src = cat.url;
-		cats.appendChild(img);
+		randomCats.push(img);
 	});
+	console.log('random cats: ', randomCats);
+	printCats();
+}
+
+function removeAllChildNodes(parent) {
+	while (parent.firstChild) {
+		parent.removeChild(parent.firstChild);
+	}
+}
+
+function createArticles(cat) {
+	const article = document.createElement('article');
+	const button = document.createElement('button');
+
+	button.innerText = 'Favorite'
+
+	article.appendChild(cat);
+	article.appendChild(button);
+	cats.appendChild(article);
+}
+
+function printCats() {
+	removeAllChildNodes(document.querySelector('#cats'));
+	randomCats.forEach(cat => createArticles(cat));
+	randomCats = [];
 }
 
 getCat();
+printCats();
 
 const button = document.querySelector('button');
 button.onclick = getCat;
